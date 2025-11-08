@@ -32,7 +32,7 @@ barraDePesquisa.addEventListener("input", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("/admin/perfil")
+  fetch("/admin/perfil", { credentials: "include" })
     .then(async (res) => {
       const contentType = res.headers.get("content-type");
       const responseText = await res.text();
@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           const resposta = await fetch("/admin/desativar-perfil-usuario", {
             method: "POST",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json"
             },
@@ -83,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           const resposta = await fetch("/admin/ativar-perfil-usuario", {
             method: "POST",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json"
             },
@@ -106,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function capturarUsuariosAdmin(pagina = 1) {
   try {
-    const res = await fetch(`/admin/capturar-usuarios?pagina=${pagina}`);
+    const res = await fetch(`/admin/capturar-usuarios?pagina=${pagina}`, { credentials: "include" });
     const data = await res.json();
 
     if (!res.ok) {
@@ -312,6 +314,7 @@ async function contarDenunciasUsuarioAprovadasAdmin(apelido) {
   try {
     const res = await fetch(`/admin/contar-denuncias-usuario-aprovadas/${encodeURIComponent(apelido)}`, {
       method: "GET",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json"
       }
@@ -341,6 +344,7 @@ async function contarDenunciasUsuarioPendentesAdmin(apelido) {
   try {
     const res = await fetch(`/admin/contar-denuncias-usuario-pendentes/${encodeURIComponent(apelido)}`, {
       method: "GET",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json"
       }
@@ -370,6 +374,7 @@ async function contarDenunciasUsuarioAdmin(apelido) {
   try {
     const res = await fetch(`/admin/contar-denuncias-usuario/${encodeURIComponent(apelido)}`, {
       method: "GET",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json"
       }
@@ -591,7 +596,7 @@ async function exibirDenunciasUsuarioAdmin(apelidoDenunciado, quantidadeDenuncia
 async function capturarDenunciasUsuarioAdmin(apelido, paginaDenunciasUsuario = 1) {
   try {
     const res = await fetch(
-      `/admin/capturar-denuncias-usuario/${encodeURIComponent(apelido)}/${encodeURIComponent(paginaDenunciasUsuario)}`
+      `/admin/capturar-denuncias-usuario/${encodeURIComponent(apelido)}/${encodeURIComponent(paginaDenunciasUsuario)}`, { credentials: "include" }
     );
 
     if (!res.ok) {
@@ -617,6 +622,7 @@ async function aprovarDenunciaUsuario(idDenunciaUsuario, apelidoAdmin, apelidoDe
   try {
     const res = await fetch('/admin/aprovar-denuncia-usuario', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idDenunciaUsuario, apelidoAdmin, apelidoDenunciado }),
     });
@@ -640,6 +646,7 @@ async function ignorarDenunciaUsuario(idDenunciaUsuario , apelidoDenunciado) {
   try {
     const res = await fetch('/admin/ignorar-denuncia-usuario', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idDenunciaUsuario, apelidoDenunciado }),
     });
@@ -661,7 +668,7 @@ async function ignorarDenunciaUsuario(idDenunciaUsuario , apelidoDenunciado) {
 
 async function pesquisarUsuariosAdmin(busca, pagina = 1) {
   try {
-    const res = await fetch(`/admin/pesquisar-usuarios?busca=${encodeURIComponent(busca)}&pagina=${pagina}`);
+    const res = await fetch(`/admin/pesquisar-usuarios?busca=${encodeURIComponent(busca)}&pagina=${pagina}`, { credentials: "include" });
     const data = await res.json();
 
     if (!res.ok) {
