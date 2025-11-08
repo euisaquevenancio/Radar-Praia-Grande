@@ -6,7 +6,7 @@ let bairroNoticiaAntesEdicao = "";
 let descricaoNoticiaAntesEdicao = "";
 const btnExcluir = document.getElementById('apagarNoticia');
 
-fetch("/usuario/perfil")
+fetch("/usuario/perfil", { credentials: "include" })
     .then(async (res) => {
         const contentType = res.headers.get("content-type");
         const responseText = await res.text();
@@ -45,7 +45,7 @@ async function carregarNoticia() {
 
     try {
         const listaBairros = document.getElementById("listaBairros");
-        const res = await fetch(`/noticia/capturar-noticia-usuario/${encodeURIComponent(idNoticia)}`);
+        const res = await fetch(`/noticia/capturar-noticia-usuario/${encodeURIComponent(idNoticia)}`, { credentials: "include" });
 
         if (!res.ok) {
             const errorData = await res.json();
@@ -142,6 +142,7 @@ async function carregarNoticia() {
                 try {
                     const response = await fetch('/noticia/apagar-noticia', {
                         method: 'POST',
+                        credentials: "include",
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ idNoticia }),
                     });
@@ -165,7 +166,7 @@ let arrayBairros = [];
 
 async function capturarBairros() {
     try {
-        const res = await fetch("noticia/capturar-bairros");
+        const res = await fetch("noticia/capturar-bairros", { credentials: "include" });
         if (!res.ok) {
             const errorData = await res.json();
             if (res.statusCode !== 200) {
@@ -368,6 +369,7 @@ async function analisarDescricao() {
     try {
         const res = await fetch("noticia/analisar-descricao", {
             method: "POST",
+            credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ descricao }),
         });
@@ -402,6 +404,7 @@ async function analisarImagens() {
 
             const res = await fetch("noticia/analisar-imagem", {
                 method: "POST",
+                credentials: "include",
                 body: formData
             });
 
@@ -479,6 +482,7 @@ document.getElementById("editarNoticiaForm").addEventListener("submit", async fu
     
                     const res = await fetch('/noticia/editar-noticia', {
                         method: 'POST',
+                        credentials: "include",
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(noticia),
                     });
@@ -499,6 +503,7 @@ document.getElementById("editarNoticiaForm").addEventListener("submit", async fu
                                 try {
                                     const res = await fetch("/imagem/upload", {
                                         method: "POST",
+                                        credentials: "include",
                                         body: formData
                                     });
     
@@ -540,6 +545,7 @@ document.getElementById("editarNoticiaForm").addEventListener("submit", async fu
     
                 const res = await fetch('/noticia/editar-noticia', {
                     method: 'POST',
+                    credentials: "include",
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(noticia),
                 });
