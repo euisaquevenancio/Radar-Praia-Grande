@@ -14,6 +14,7 @@ document.getElementById("LoginForm").addEventListener("submit", async function(e
     try {
         const response = await fetch("login", { 
             method: "POST",
+            credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(admin),
             credentials: "include"
