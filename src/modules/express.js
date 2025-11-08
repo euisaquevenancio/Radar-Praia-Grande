@@ -52,15 +52,18 @@ app.use(session({
     saveUninitialized: false,
     resave: false,
     cookie: { 
-        maxAge: 60 * 60 * 1000,
+        maxAge: 60 * 60 * 1000, // 1 hora
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+        secure: process.env.NODE_ENV === "production", // HTTPS no Render
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax" // necessário para HTTPS
     }
 }));
 
 // Middlewares gerais
-app.use(cors());
+app.use(cors({
+  origin: "https://radar-praia-grande.onrender.com",
+  credentials: true
+}));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
