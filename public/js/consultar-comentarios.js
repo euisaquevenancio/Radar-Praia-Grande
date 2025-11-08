@@ -42,7 +42,7 @@ barraDePesquisa.addEventListener("input", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    fetch("/admin/perfil")
+    fetch("/admin/perfil", { credentials: "include" })
         .then(async (res) => {
             const contentType = res.headers.get("content-type");
             const responseText = await res.text();
@@ -81,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 try {
                     const resposta = await fetch("/admin/desativar-noticia", {
                         method: "POST",
+                        credentials: "include",
                         headers: {
                             "Content-Type": "application/json"
                         },
@@ -101,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 try {
                     const resposta = await fetch("/admin/ativar-noticia", {
                         method: "POST",
+                        credentials: "include",
                         headers: {
                             "Content-Type": "application/json"
                         },
@@ -126,6 +128,7 @@ async function apagarComentarioNoticia(idComentario) {
     try {
         const res = await fetch('/noticia/apagar-comentario-noticia', {
             method: 'POST',
+            credentials: "include",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ idComentario }),
         });
@@ -146,7 +149,7 @@ async function apagarComentarioNoticia(idComentario) {
 
 async function capturarComentariosAdmin(pagina = 1) {
     try {
-        const res = await fetch(`/admin/capturar-comentarios?pagina=${pagina}`);
+        const res = await fetch(`/admin/capturar-comentarios?pagina=${pagina}`, { credentials: "include" });
         const data = await res.json();
 
         if (!res.ok) {
@@ -342,6 +345,7 @@ async function contarDenunciasComentarioPendentesAdmin(idComentario) {
     try {
         const res = await fetch(`/admin/contar-denuncias-comentario-pendentes/${encodeURIComponent(idComentario)}`, {
             method: "GET",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json"
             }
@@ -369,7 +373,7 @@ async function contarDenunciasComentarioPendentesAdmin(idComentario) {
 
 async function pesquisarComentariosAdmin(busca, pagina = 1) {
     try {
-        const res = await fetch(`/admin/pesquisar-comentarios?busca=${encodeURIComponent(busca)}&pagina=${pagina}`);
+        const res = await fetch(`/admin/pesquisar-comentarios?busca=${encodeURIComponent(busca)}&pagina=${pagina}`, { credentials: "include" });
         const data = await res.json();
 
         if (!res.ok) {
@@ -552,6 +556,7 @@ async function contarCurtidasComentarioNoticia(idComentario) {
     try {
         const res = await fetch('/noticia/contar-curtidas-comentario-noticia', {
             method: 'POST',
+            credentials: "include",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ idComentario }),
         });
@@ -575,6 +580,7 @@ async function contarDenunciasComentarioAdmin(idComentario) {
     try {
         const res = await fetch(`/admin/contar-denuncias-comentario/${encodeURIComponent(idComentario)}`, {
             method: "GET",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json"
             }
@@ -763,6 +769,7 @@ async function aprovarDenunciaComentario(idDenunciaComentario, apelidoAdmin, idC
     try {
         const res = await fetch('/admin/aprovar-denuncia-comentario', {
             method: 'POST',
+            credentials: "include",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ idDenunciaComentario, apelidoAdmin, idComentario }),
         });
@@ -786,6 +793,7 @@ async function ignorarDenunciaComentario(idDenunciaComentario, idComentario) {
     try {
         const res = await fetch('/admin/ignorar-denuncia-comentario', {
             method: 'POST',
+            credentials: "include",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ idDenunciaComentario, idComentario }),
         });
@@ -808,7 +816,7 @@ async function ignorarDenunciaComentario(idDenunciaComentario, idComentario) {
 async function capturarDenunciasComentarioAdmin(idComentario, paginaDenunciasComentario = 1) {
     try {
         const res = await fetch(
-            `/admin/capturar-denuncias-comentario/${encodeURIComponent(idComentario)}/${encodeURIComponent(paginaDenunciasComentario)}`
+            `/admin/capturar-denuncias-comentario/${encodeURIComponent(idComentario)}/${encodeURIComponent(paginaDenunciasComentario)}`, { credentials: "include" }
         );
 
         if (!res.ok) {
@@ -832,7 +840,7 @@ async function capturarDenunciasComentarioAdmin(idComentario, paginaDenunciasCom
 
 async function capturarNoticiaAdmin(idNoticia) {
     try {
-        const res = await fetch(`/admin/capturar-noticia?idNoticia=${idNoticia}`);
+        const res = await fetch(`/admin/capturar-noticia?idNoticia=${idNoticia}`, { credentials: "include" });
         const data = await res.json();
 
         if (!res.ok) {
@@ -995,6 +1003,7 @@ async function contarCurtidasNoticia(idNoticia) {
     try {
         const res = await fetch('/noticia/contar-curtidas-noticia', {
             method: 'POST',
+            credentials: "include",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ idNoticia }),
         });
@@ -1018,6 +1027,7 @@ async function contarDenunciasNoticiaAprovadasAdmin(idNoticia) {
     try {
         const res = await fetch(`/admin/contar-denuncias-noticia-aprovadas/${encodeURIComponent(idNoticia)}`, {
             method: "GET",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json"
             }
@@ -1047,6 +1057,7 @@ async function contarDenunciasNoticiaPendentesAdmin(idNoticia) {
     try {
         const res = await fetch(`/admin/contar-denuncias-noticia-pendentes/${encodeURIComponent(idNoticia)}`, {
             method: "GET",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json"
             }
@@ -1076,6 +1087,7 @@ async function contarDenunciasNoticiaAdmin(idNoticia) {
     try {
         const res = await fetch(`/admin/contar-denuncias-noticia/${encodeURIComponent(idNoticia)}`, {
             method: "GET",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json"
             }
@@ -1105,6 +1117,7 @@ async function contarComentariosNoticia(idNoticia) {
     try {
         const res = await fetch('/noticia/contar-comentarios-noticia', {
             method: 'POST',
+            credentials: "include",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ idNoticia }),
         });
