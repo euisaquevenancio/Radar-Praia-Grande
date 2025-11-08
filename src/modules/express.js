@@ -51,10 +51,11 @@ app.use(session({
     store: new MemoryStore({ checkPeriod: 86400000 }),
     saveUninitialized: false,
     resave: false,
-    cookie: { 
-        maxAge: 60000 * 60,
-        httpOnly: true, 
-        secure: process.env.NODE_ENV === 'production'
+    cookie: {
+        maxAge: 60 * 60 * 1000,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax"
     }
 }));
 
