@@ -46,6 +46,8 @@ const app = express();
 const memorystore = await import("memorystore").then(m => m.default);
 const MemoryStore = memorystore(session);
 
+app.set("trust proxy", 1);
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     store: new MemoryStore({ checkPeriod: 86400000 }),
