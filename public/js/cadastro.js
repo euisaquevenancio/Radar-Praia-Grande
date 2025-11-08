@@ -27,6 +27,7 @@ document.getElementById("cadastroForm").addEventListener("submit", async functio
 
     const response = await fetch("usuario/cadastro", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(usuario)
     });
@@ -36,7 +37,7 @@ document.getElementById("cadastroForm").addEventListener("submit", async functio
     if (!response.ok) {
         erroMensagem.textContent = `${data.message}`;
     } else {
-        const blobfotoPerfil = await (await fetch("/imagens/iconeUsuarioPadrao.jpg")).blob();
+        const blobfotoPerfil = await (await fetch("/imagens/iconeUsuarioPadrao.jpg", { credentials: "include" })).blob();
 
         const formDatafotoPerfil = new FormData();
         formDatafotoPerfil.append("imagem", blobfotoPerfil, "iconeUsuarioPadrao.jpg");
@@ -46,10 +47,11 @@ document.getElementById("cadastroForm").addEventListener("submit", async functio
 
         await fetch("/imagem/upload", {
             method: "POST",
+            credentials: "include",
             body: formDatafotoPerfil
         });
 
-        const blobfotoCapa = await (await fetch("/imagens/bannerUsuarioPadrao.jpg")).blob();
+        const blobfotoCapa = await (await fetch("/imagens/bannerUsuarioPadrao.jpg", { credentials: "include" })).blob();
 
         const formDatafotoCapa = new FormData();
         formDatafotoCapa.append("imagem", blobfotoCapa, "bannerUsuarioPadrao.jpg");
