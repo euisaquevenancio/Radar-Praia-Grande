@@ -10,7 +10,7 @@ const modalDenunciarNoticia = document.getElementById("denunciarNoticiaModal");
 const modalDenunciarComentario = document.getElementById("denunciarComentarioModal");
 
 document.addEventListener("DOMContentLoaded", () => {
- fetch("/usuario/perfil")
+ fetch("/usuario/perfil", { credentials: "include" })
   .then(async (res) => {
     const contentType = res.headers.get("content-type");
     const responseText = await res.text();
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
  
 async function capturarNoticias(pagina = 1) {
   try {
-    const res = await fetch(`/noticia/capturar-noticias?pagina=${pagina}`);
+    const res = await fetch(`/noticia/capturar-noticias?pagina=${pagina}`, { credentials: "include" });
     if (!res.ok) {
       const errorData = await res.json();
       await exibirAlertaErro("error", "Erro", "Erro ao buscar notícias!");
@@ -293,6 +293,7 @@ async function verificarCurtidaNoticia(idNoticia, apelido) {
   try {
     const res = await fetch('/noticia/verifica-curtida-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idNoticia, apelido }),
     });
@@ -316,6 +317,7 @@ async function contarCurtidasNoticia(idNoticia) {
   try {
     const res = await fetch('/noticia/contar-curtidas-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idNoticia }),
     });
@@ -381,6 +383,7 @@ async function curtirNoticia(idNoticia) {
   try {
     const res = await fetch('/noticia/curtir-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idNoticia, apelido }),
     });
@@ -404,6 +407,7 @@ async function removerCurtidaNoticia(idNoticia) {
   try {
     const res = await fetch('/noticia/remover-curtida-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idNoticia, apelido }),
     });
@@ -427,6 +431,7 @@ async function contarComentariosNoticia(idNoticia) {
   try {
     const res = await fetch('/noticia/contar-comentarios-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idNoticia }),
     });
@@ -450,6 +455,7 @@ async function comentarNoticia(comentario, idNoticia) {
   try {
     const res = await fetch('/noticia/comentar-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ comentario, idNoticia, apelido }),
     });
@@ -472,7 +478,7 @@ async function comentarNoticia(comentario, idNoticia) {
 async function capturarComentariosNoticia(idNoticia, paginaComentarios = 1) {
   try {
     const res = await fetch(
-      `/noticia/capturar-comentarios-noticia/${encodeURIComponent(idNoticia)}/${encodeURIComponent(paginaComentarios)}`
+      `/noticia/capturar-comentarios-noticia/${encodeURIComponent(idNoticia)}/${encodeURIComponent(paginaComentarios)}`, { credentials: "include" }
     );
 
     if (!res.ok) {
@@ -498,6 +504,7 @@ async function verificarCurtidaComentarioNoticia(idComentario, apelido) {
   try {
     const res = await fetch('/noticia/verifica-curtida-comentario-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idComentario, apelido }),
     });
@@ -521,6 +528,7 @@ async function contarCurtidasComentarioNoticia(idComentario) {
   try {
     const res = await fetch('/noticia/contar-curtidas-comentario-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idComentario }),
     });
@@ -586,6 +594,7 @@ async function curtirComentarioNoticia(idComentario) {
   try {
     const res = await fetch('/noticia/curtir-comentario-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idComentario, apelido }),
     });
@@ -609,6 +618,7 @@ async function removerCurtidaComentarioNoticia(idComentario) {
   try {
     const res = await fetch('/noticia/remover-curtida-comentario-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idComentario, apelido }),
     });
@@ -632,6 +642,7 @@ async function editarComentarioNoticia(comentarioEditado, idComentario) {
   try {
     const res = await fetch('/noticia/editar-comentario-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ comentarioEditado, idComentario }),
     });
@@ -655,6 +666,7 @@ async function apagarComentarioNoticia(idComentario) {
   try {
     const res = await fetch('/noticia/apagar-comentario-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idComentario }),
     });
@@ -891,7 +903,7 @@ barrasDePesquisa.forEach(barra => {
 let arrayCategoriasDenuncia = [];
 async function capturarCategoriasDenuncia() {
     try {
-        const res = await fetch("denuncia/capturar-categorias-denuncia");
+        const res = await fetch("denuncia/capturar-categorias-denuncia", { credentials: "include" });
         if (!res.ok) {
             const errorData = await res.json();
             await exibirAlertaErro("error", "Erro", "Erro ao buscar categorias de denúncia!");
@@ -980,6 +992,7 @@ async function verificarDenunciaNoticia(idNoticia, apelido) {
   try {
     const res = await fetch('/denuncia/verifica-denuncia-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idNoticia, apelido }),
     });
@@ -1003,6 +1016,7 @@ async function verificarDenunciaComentario(idComentario, apelido) {
   try {
     const res = await fetch('/denuncia/verifica-denuncia-comentario', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idComentario, apelido }),
     });
@@ -1026,6 +1040,7 @@ async function denunciarComentario(categoriaDenunciaSelecionada, denuncia, idCom
   try {
     const res = await fetch('/denuncia/denunciar-comentario', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ categoriaDenunciaSelecionada, denuncia, idComentario, apelido }),
     });
@@ -1049,6 +1064,7 @@ async function denunciarNoticia(categoriaDenunciaSelecionada, denuncia, idNotici
   try {
     const res = await fetch('/denuncia/denunciar-noticia', {
       method: 'POST',
+      credentials: "include",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ categoriaDenunciaSelecionada, denuncia, idNoticia, apelido }),
     });
