@@ -1,3 +1,13 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+import express from "express";
+import session from "express-session";
+import path from "path";
+import { fileURLToPath } from "url";
+import multer from "multer";
+
+// IMPORTS DOS MODELS (funções createTable...)
 import { createTableUsuario } from "../model/usuarioModel.js";
 import { createTableAmizade } from "../model/amizadeModel.js";
 import { createTableBairro } from "../model/bairroModel.js";
@@ -10,27 +20,6 @@ import { createTableCategoriaDenuncia } from "../model/categoriaDenunciaModel.js
 import { createTableDenunciaComentario } from "../model/denunciaComentarioModel.js";
 import { createTableDenunciaNoticia } from "../model/denunciaNoticiaModel.js";
 import { createTableDenunciaUsuario } from "../model/denunciaUsuarioModel.js";
-// Criando as tabelas
-await createTableUsuario();
-await createTableAmizade();
-await createTableBairro();
-await createTableNoticia();
-await createTableImagem();
-await createTableCurtidaNoticia();
-await createTableComentario();
-await createTableCurtidaComentario();
-await createTableCategoriaDenuncia();
-await createTableDenunciaComentario();
-await createTableDenunciaNoticia();
-await createTableDenunciaUsuario();
-
-import express from "express";
-import session from "express-session";
-import dotenv from "dotenv";
-import cors from "cors";
-import multer from "multer";
-import path from "path";
-import { fileURLToPath } from "url";
 
 import { impedeUsuariosAutenticados } from "../controller/usuarioController.js";
 
@@ -38,34 +27,33 @@ import { impedeUsuariosAutenticados } from "../controller/usuarioController.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config();
-
 const app = express();
 
-// Configuração do session com memorystore
-const memorystore = await import("memorystore").then(m => m.default);
-const MemoryStore = memorystore(session);
-
+// === IMPORTANT: Trust proxy (Render, Heroku, etc.) ===
+// Without this, Express doesn't detect HTTPS behind a proxy and cookies with `secure: true` won't be set.
 app.set("trust proxy", 1);
 
+// === Session setup (memorystore) ===
+// We import memorystore dynamically to keep behavior compatible with ESM and avoid forcing dev-only imports.
+const memorystore = (await import("memorystore")).default;
+const MemoryStore = memorystore(session);
+
 app.use(session({
-    secret: process.env.SESSION_SECRET,
-    store: new MemoryStore({ checkPeriod: 86400000 }),
-    saveUninitialized: false,
-    resave: false,
-    cookie: { 
-        maxAge: 60 * 60 * 1000, // 1 hora
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // HTTPS no Render
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax" // necessário para HTTPS
-    }
+  secret: process.env.SESSION_SECRET || "changeme",
+  store: new MemoryStore({ checkPeriod: 86400000 }),
+  saveUninitialized: false,
+  resave: false,
+  cookie: {
+    maxAge: 60 * 60 * 1000, // 1 hour
+    httpOnly: true,
+    // In production (Render) we want secure + sameSite none so browsers accept cross-site cookies in HTTPS.
+    // For your case frontend and backend are same-origin, but these settings are safe for production behind HTTPS.
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
+  }
 }));
 
-// Middlewares gerais
-app.use(cors({
-  origin: "https://radar-praia-grande.onrender.com",
-  credentials: true
-}));
+// Middlewares
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
@@ -74,79 +62,41 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage, limits: { fileSize: 50 * 1024 * 1024 } });
 
 // Servir arquivos estáticos da pasta public
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "../public")));
 
-// Redirecionar index.html para /
-app.get("/index.html", (req, res) => {
-    res.redirect("/");
-});
+// Rotas estáticas e redirecionamentos
+app.get("/index.html", (req, res) => res.redirect("/"));
 app.get("/", impedeUsuariosAutenticados, (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/index.html"));
+  res.sendFile(path.join(__dirname, "../view/index.html"));
 });
 
 app.get("/cadastro.html", impedeUsuariosAutenticados, (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/cadastro.html"));
+  res.sendFile(path.join(__dirname, "../view/cadastro.html"));
 });
 app.get("/login.html", impedeUsuariosAutenticados, (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/login.html"));
+  res.sendFile(path.join(__dirname, "../view/login.html"));
 });
 
-app.get("/admin/", (req, res) => {
-    res.redirect("/admin/login.html");
-});
-app.get("/admin/login", (req, res) => {
-    res.redirect("/admin/login.html");
-});
+app.get("/admin/", (req, res) => res.redirect("/admin/login.html"));
+app.get("/admin/login", (req, res) => res.redirect("/admin/login.html"));
 app.get("/admin/login.html", impedeUsuariosAutenticados, (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/login-admin.html"));
+  res.sendFile(path.join(__dirname, "../view/login-admin.html"));
 });
 
-// Rotas que precisam de autenticação
-app.get("/home.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/home.html"));
-});
-app.get("/cadastro-noticia.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/cadastro-noticia.html"));
-});
-app.get("/editar-noticia.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/editar-noticia.html"));
-});
-app.get("/resultados-pesquisa.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/resultados-pesquisa.html"));
-});
-app.get("/editar-perfil.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/editar-perfil.html"));
-});
-app.get("/perfil.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/perfil.html"));
-});
-app.get("/admin/consultar-usuarios.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/consultar-usuarios.html"));
-});
-app.get("/admin/consultar-noticias.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/consultar-noticias.html"));
-});
-app.get("/admin/consultar-comentarios.html", (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/consultar-comentarios.html"));
-});
-app.get("/perfil/:apelidoOutroUsuario", (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/perfil-outro-usuario.html"));
-});
-app.get("/noticias/:apelidoAutor/:idNoticia", (req, res) => {
-    res.sendFile(path.join(__dirname, "../view/noticia.html"));
-});
+// Rotas que precisam de autenticação (essas servem apenas HTML - a autenticação real deve ocorrer nas rotas /usuario/...)
+app.get("/home.html", (req, res) => res.sendFile(path.join(__dirname, "../view/home.html")));
+app.get("/cadastro-noticia.html", (req, res) => res.sendFile(path.join(__dirname, "../view/cadastro-noticia.html")));
+app.get("/editar-noticia.html", (req, res) => res.sendFile(path.join(__dirname, "../view/editar-noticia.html")));
+app.get("/resultados-pesquisa.html", (req, res) => res.sendFile(path.join(__dirname, "../view/resultados-pesquisa.html")));
+app.get("/editar-perfil.html", (req, res) => res.sendFile(path.join(__dirname, "../view/editar-perfil.html")));
+app.get("/perfil.html", (req, res) => res.sendFile(path.join(__dirname, "../view/perfil.html")));
+app.get("/admin/consultar-usuarios.html", (req, res) => res.sendFile(path.join(__dirname, "../view/consultar-usuarios.html")));
+app.get("/admin/consultar-noticias.html", (req, res) => res.sendFile(path.join(__dirname, "../view/consultar-noticias.html")));
+app.get("/admin/consultar-comentarios.html", (req, res) => res.sendFile(path.join(__dirname, "../view/consultar-comentarios.html")));
+app.get("/perfil/:apelidoOutroUsuario", (req, res) => res.sendFile(path.join(__dirname, "../view/perfil-outro-usuario.html")));
+app.get("/noticias/:apelidoAutor/:idNoticia", (req, res) => res.sendFile(path.join(__dirname, "../view/noticia.html")));
 
-/*
-app.use((req, res, next) => {
-  res.status(404);
-  if (req.accepts("html")) {
-    res.sendFile(path.join(__dirname, "../view/404.html"));
-    return;
-  }
-});
-*/
-
-// Importação e uso das rotas especializadas
+// Importação e uso das rotas especializadas (essas rotas devem usar req.session no backend)
 import usuarioRoutes from "../routes/usuarioRoutes.js";
 import noticiaRoutes from "../routes/noticiaRoutes.js";
 import imagemRoutes from "../routes/imagemRoutes.js";
@@ -159,8 +109,28 @@ app.use("/imagem", imagemRoutes);
 app.use("/denuncia", denunciaRoutes);
 app.use("/admin", adminRoutes);
 
+// Fallback 404 (aplica impedeUsuariosAutenticados antes de mostrar a página de erro)
 app.use(impedeUsuariosAutenticados, (req, res) => {
-  res.sendFile(path.join(__dirname, "../view/erro-404.html"));
+  res.status(404).sendFile(path.join(__dirname, "../view/erro-404.html"));
 });
+
+// Criar as tabelas (executa após o app ter sido criado)
+try {
+  await createTableUsuario();
+  await createTableAmizade();
+  await createTableBairro();
+  await createTableNoticia();
+  await createTableImagem();
+  await createTableCurtidaNoticia();
+  await createTableComentario();
+  await createTableCurtidaComentario();
+  await createTableCategoriaDenuncia();
+  await createTableDenunciaComentario();
+  await createTableDenunciaNoticia();
+  await createTableDenunciaUsuario();
+  console.log("Tabelas verificadas/criadas com sucesso.");
+} catch (err) {
+  console.error("Erro ao criar/verificar tabelas:", err);
+}
 
 export default app;
