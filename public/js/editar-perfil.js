@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let dadosEditados = {};
   let arquivosEditados = {};
 
- fetch("/usuario/editar-perfil")
+ fetch("/usuario/editar-perfil", { credentials: "include" })
   .then(async (res) => {
     const contentType = res.headers.get("content-type");
     const responseText = await res.text();
@@ -131,6 +131,7 @@ salvarBtn.addEventListener("click", async () => {
       // Adiciona a promessa ao array uploads para aguardar depois
       uploads.push(fetch("/imagem/update", {
         method: "POST",
+        credentials: "include",
         body: formDataPerfil
       }));
     }
@@ -144,6 +145,7 @@ salvarBtn.addEventListener("click", async () => {
 
       uploads.push(fetch("/imagem/update", {
         method: "POST",
+        credentials: "include",
         body: formDatafotoCapa
       }));
     }
@@ -161,6 +163,7 @@ salvarBtn.addEventListener("click", async () => {
     // Agora que as imagens foram enviadas, envia os demais dados do perfil
     const resposta = await fetch("/usuario/editar-perfil", {
       method: "PUT",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json"
       },
@@ -188,6 +191,7 @@ salvarBtn.addEventListener("click", async () => {
   
     try {
       const resposta = await fetch("/usuario/editar-perfil", {
+        credentials: "include",
         method: "DELETE"
       });
   
