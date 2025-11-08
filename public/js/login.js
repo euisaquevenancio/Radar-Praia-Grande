@@ -13,6 +13,7 @@ document.getElementById("LoginForm").addEventListener("submit", async function(e
     try {
         const response = await fetch("usuario/login", { 
             method: "POST",
+            credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(usuario),
             credentials: "include"
