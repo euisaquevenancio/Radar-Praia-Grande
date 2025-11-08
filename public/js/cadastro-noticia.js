@@ -2,8 +2,9 @@ import { exibirAlertaErro, exibirAlertaSucesso, exibirAlertaErroERedirecionar, e
 
 let apelido = "";
 
- fetch("/usuario/perfil")
+ fetch("/usuario/perfil", { credentials: "include" })
   .then(async (res) => {
+    credentials: "include"
     const contentType = res.headers.get("content-type");
     const responseText = await res.text();
 
@@ -36,7 +37,7 @@ let arrayBairros = [];
 
 async function capturarBairros() {
     try {
-        const res = await fetch("noticia/capturar-bairros");
+        const res = await fetch("noticia/capturar-bairros", { credentials: "include" });
         if (!res.ok) {
             const errorData = await res.json();
             await exibirAlertaErro("error", "Erro", "Erro ao buscar bairros!");
@@ -240,6 +241,7 @@ async function analisarDescricao() {
     try {
         const res = await fetch("noticia/analisar-descricao", {
             method: "POST",
+            credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ descricao }),
         });
@@ -274,6 +276,7 @@ async function analisarImagens() {
 
             const res = await fetch("noticia/analisar-imagem", {
                 method: "POST",
+                credentials: "include",
                 body: formData
             });
 
@@ -348,6 +351,7 @@ document.getElementById("cadastronoticiaForm").addEventListener("submit", async 
                 // Envia a notícia
                 const response = await fetch("noticia/cadastro", {
                     method: "POST",
+                    credentials: "include",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(noticia)
                 });
@@ -368,6 +372,7 @@ document.getElementById("cadastronoticiaForm").addEventListener("submit", async 
                             try {
                                 const res = await fetch("/imagem/upload", {
                                     method: "POST",
+                                    credentials: "include",
                                     body: formData
                                 });
 
@@ -410,6 +415,7 @@ document.getElementById("cadastronoticiaForm").addEventListener("submit", async 
             // Envia a notícia
             const response = await fetch("noticia/cadastro", {
                 method: "POST",
+                credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(noticia)
             });
