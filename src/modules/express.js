@@ -174,8 +174,7 @@ app.use("/imagem", imagemRoutes);
 app.use("/denuncia", denunciaRoutes);
 app.use("/admin", adminRoutes);
 
-// Rota 404 personalizada
-app.use(impedeUsuariosAutenticados, (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, "../view/erro-404.html"));
 });
 
