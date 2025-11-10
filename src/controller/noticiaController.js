@@ -1049,7 +1049,7 @@ export async function capturarNoticia(req, res) {
     const noticiaExiste = await verificaNoticia(idNoticia);
 
     if (noticiaExiste > 0 && usuarioExiste.existe > 0 && usuarioExiste.admin == 0) {
-      const noticia = await selectNoticia(idNoticia);
+      const noticia = await selectNoticia(idNoticia, apelidoAutor);
 
       res.status(200).json({
         statusCode: 200,
