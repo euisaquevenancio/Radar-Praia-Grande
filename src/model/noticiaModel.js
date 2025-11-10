@@ -761,7 +761,7 @@ export async function selectNoticiaAdmin(idNoticia) {
   }
 }
 
-export async function selectNoticia(idNoticia) {
+export async function selectNoticia(idNoticia, apelido) {
   try {
     const rows = await db.all(
       `SELECT 
@@ -785,10 +785,11 @@ export async function selectNoticia(idNoticia) {
         WHERE 
           N.desativado = 0
           AND U.desativado = 0 
-          AND N.idNoticia = ?
+          AND N.idNoticia = ? 
+          AND N.apelido = ? 
         ORDER BY 
           N.idNoticia DESC`,
-      ["Notícia", idNoticia]
+      ["Notícia", idNoticia, apelido]
     );
 
     if (!rows || rows.length === 0) {
