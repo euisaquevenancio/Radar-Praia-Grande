@@ -94,6 +94,8 @@ body, html {
 }
 
 .ver-senha button {
+  width: auto;
+  margin: auto;
   position: absolute;
   right: 10px;
   top: 50%;
@@ -117,7 +119,7 @@ body, html {
     background-color: var(--branco);
 }
 
-input[type="password"] {
+input[type="password"], input[type="text"] {
   width: 100%;
   padding: 10px;
   font-size: 16px;
@@ -128,16 +130,16 @@ input[type="password"] {
   color: var(--preto)
 }
 
-input[type="password"]:focus{
+input[type="password"]:focus, input[type="text"]:focus{
   outline: none;
   box-shadow: none;
 }
 
-input[type="password"]::placeholder {
+input[type="password"]::placeholder, input[type="text"]::placeholder {
   color: var(--marrom-escuro);
 }
 
-input[type="password"]:focus::placeholder {
+input[type="password"]:focus::placeholder, input[type="text"]:focus::placeholder {
   color: transparent;
 }
 
@@ -154,6 +156,9 @@ button {
   font-weight: 700;
 }
 
-button:hover {
+button:not(#toggleSenha):hover {
     background-color: var(--preto);
 }
+
+
+
