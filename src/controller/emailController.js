@@ -104,7 +104,7 @@ export async function gerarConteudoEmailConfirmarCadastro(email, token, apelido)
         <div class="content">
           <h2>Confirmação de cadastro</h2>
           <p>Olá ${apelido}, para ativar sua conta clique no link abaixo:</p>
-          <a href="http://localhost:8080/tokens/token-confirmar-cadastro/${apelido}/${token}">
+          <a href="https://radar-praia-grande.onrender.com/tokens/token-confirmar-cadastro/${apelido}/${token}">
             Confirmar cadastro
           </a>
           <p class="note">Este link expira em 1 hora.</p>
